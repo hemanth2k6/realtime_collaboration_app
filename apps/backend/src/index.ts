@@ -23,6 +23,12 @@ app.get('/api/message', (req: Request, res: Response) => {
   res.json({ message: sharedFunction() });
 });
 
-app.listen(port, () => {
-  console.log(`Backend is running on http://localhost:${port}`);
+import { createServer } from 'http';
+import { initializeSocket } from './socket';
+
+const httpServer = createServer(app);
+initializeSocket(httpServer);
+
+httpServer.listen(port, () => {
+  console.log(`Backend and Socket.io are running on http://localhost:${port}`);
 });
