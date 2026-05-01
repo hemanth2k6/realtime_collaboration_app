@@ -13,7 +13,10 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+import aiRoutes from './routes/ai.routes';
+
 app.use('/api/auth', authRoutes);
+app.use('/api/ai', aiRoutes);
 
 app.get('/health', (req: Request, res: Response) => {
   res.json({ status: 'ok', time: new Date().toISOString() });
