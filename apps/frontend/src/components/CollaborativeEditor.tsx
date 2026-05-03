@@ -7,7 +7,7 @@ interface CollaborativeEditorProps {
   documentId: string;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
 
 export const CollaborativeEditor: React.FC<CollaborativeEditorProps> = ({ documentId }) => {
   const { content, updateContent, isConnected } = useDocumentSocket(documentId);

@@ -1,31 +1,58 @@
-version: '3.8'
-
 services:
+
+  # ── PostgreSQL ──────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: collab
+      POSTGRES_PASSWORD: collab_pass
+      POSTGRES_DB: collab_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U collab -d collab_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ── Backend (Express + Socket.io) ───────────────────────────────────────────
   backend:
     build:
       context: .
       dockerfile: apps/backend/Dockerfile
+    restart: unless-stopped
     ports:
-      - "5000:5000"
+      - "5001:5001"
+    env_file: .env
     environment:
-      - PORT=5000
-      - NODE_ENV=development
-    volumes:
-      - ./apps/backend:/app/apps/backend
-      - ./packages:/app/packages
-    command: npm run dev --workspace=apps/backend
+      NODE_ENV: production
+      # Must match published port; .env PORT is shared — keep backend explicit here.
+      PORT: "5001"
+    depends_on:
+      postgres:
+        condition: service_healthy   # waits until pg_isready passes
 
+  # ── Frontend (Next.js) ──────────────────────────────────────────────────────
   frontend:
     build:
       context: .
       dockerfile: apps/frontend/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    restart: unless-stopped
     ports:
       - "3000:3000"
+    env_file: .env
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:5000/api
-    volumes:
-      - ./apps/frontend:/app/apps/frontend
-      - ./packages:/app/packages
-    command: npm run dev --workspace=apps/frontend
+      NODE_ENV: production
+      # Override shared .env PORT=5001 so Next.js does not bind the API port.
+      PORT: "3000"
+      HOSTNAME: "0.0.0.0"
     depends_on:
       - backend
+
+volumes:
+  postgres_data:
