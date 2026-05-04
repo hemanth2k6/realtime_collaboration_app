@@ -4,13 +4,13 @@ WORKDIR /app
 
 # Copy monorepo manifests first for layer caching
 COPY package.json package-lock.json ./
-COPY packages/shared/package.json ./packages/shared/
-COPY apps/backend/package.json        ./apps/backend/
+COPY packages/shared/package.json ./packages/shared/package.json
+COPY apps/backend/package.json        ./apps/backend/package.json
 
-# Install ALL dependencies (including devDeps needed to compile)
+# Install ALL dependencies
 RUN npm ci
 
-# Copy source
+# Copy source code
 COPY packages/shared ./packages/shared
 COPY apps/backend    ./apps/backend
 

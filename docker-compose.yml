@@ -29,11 +29,11 @@ services:
     env_file: .env
     environment:
       NODE_ENV: production
-      # Must match published port; .env PORT is shared — keep backend explicit here.
       PORT: "5001"
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
     depends_on:
       postgres:
-        condition: service_healthy   # waits until pg_isready passes
+        condition: service_healthy
 
   # ── Frontend (Next.js) ──────────────────────────────────────────────────────
   frontend:

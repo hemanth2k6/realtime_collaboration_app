@@ -6,6 +6,15 @@ import authRoutes from './routes/auth.routes';
 
 dotenv.config();
 
+// Diagnostic log for AI Key (Masked for security)
+const aiKey = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
+if (aiKey) {
+  const masked = aiKey.substring(0, 6) + "..." + aiKey.substring(aiKey.length - 4);
+  console.log(`[Config] AI API Key detected: ${masked}`);
+} else {
+  console.warn("[Config] Warning: No AI API Key found in environment variables.");
+}
+
 const app = express();
 
 const DEFAULT_PORT = 5001;
@@ -20,9 +29,12 @@ app.use(express.json());
 // Routes
 import aiRoutes from './routes/ai.routes';
 import workspaceRoutes from './routes/workspace.routes';
+import { getSharedDocument, searchDocument } from './controllers/workspace.controller';
 
 app.use('/api/auth', authRoutes);
 app.use('/api/ai', aiRoutes);
+app.get('/api/search', searchDocument);
+app.get('/api/workspace/:workspaceName/document/:documentId', getSharedDocument);
 app.use('/api/workspaces', workspaceRoutes);
 
 app.get('/health', (req: Request, res: Response) => {
