@@ -7,12 +7,12 @@ import authRoutes from './routes/auth.routes';
 dotenv.config();
 
 // Diagnostic log for AI Key (Masked for security)
-const aiKey = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
+const aiKey = process.env.OPENROUTER_API_KEY;
 if (aiKey) {
   const masked = aiKey.substring(0, 6) + "..." + aiKey.substring(aiKey.length - 4);
-  console.log(`[Config] AI API Key detected: ${masked}`);
+  console.log(`[Config] OpenRouter API Key detected: ${masked}`);
 } else {
-  console.warn("[Config] Warning: No AI API Key found in environment variables.");
+  console.warn("[Config] Warning: No OPENROUTER_API_KEY found in environment variables.");
 }
 
 const app = express();

@@ -79,24 +79,25 @@ export default function DocumentPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-zinc-950">
+    <div className="flex flex-col min-h-screen bg-zinc-50 dark:bg-zinc-950 overflow-x-hidden">
       {/* Header bar */}
-      <header className="bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <header className="bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 px-4 md:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 sticky top-0 z-50">
+        <div className="flex items-center gap-4 w-full sm:w-auto">
           <button 
             onClick={() => router.push('/dashboard')}
-            className="text-zinc-500 hover:text-black dark:hover:text-white"
+            className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold text-sm transition-colors active:scale-95"
           >
-            ← Back to Dashboard
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+            Dashboard
           </button>
         </div>
-        <div className="text-sm text-zinc-500 dark:text-zinc-400">
-          Editing as: <span className="font-medium text-black dark:text-white">{user.email}</span>
+        <div className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-800/50 px-4 py-2 rounded-full border border-zinc-100 dark:border-zinc-700 w-full sm:w-auto text-center">
+          Collaborating as <span className="font-bold text-zinc-900 dark:text-white">{user.email}</span>
         </div>
       </header>
 
       {/* Editor Main Area */}
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-3 md:p-12 lg:p-16">
         <CollaborativeEditor documentId={documentId} />
       </main>
     </div>
