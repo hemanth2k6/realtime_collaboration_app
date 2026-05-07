@@ -3,6 +3,8 @@ import { verifyAccessToken, TokenPayload } from '../utils/jwt';
 
 export interface AuthRequest extends Request {
   user?: TokenPayload;
+  body: any;
+  headers: import('http').IncomingHttpHeaders;
 }
 
 export const authenticate = (req: AuthRequest, res: Response, next: NextFunction): void => {
